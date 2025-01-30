@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+            http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+            http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd"
+>
+    <changeSet id="10b550a5-6426-4e7c-aa03-07726d70fb77" author="Gabriel Santos">
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+            CREATE TABLE IF NOT EXISTS cpf_rating (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                cpf VARCHAR(255) NOT NULL,
+                rating VARCHAR(255) NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS credit_card_transaction (
+                 transaction_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                 credit_card VARCHAR(255) NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS transaction_status (
+                transaction_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                status VARCHAR(255) NOT NULL
+            );
+
+            INSERT INTO cpf_rating(id, cpf, rating)
+            VALUES (gen_random_uuid(), '91554035066', 'GOOD');
+
+            INSERT INTO cpf_rating(id, cpf, rating)
+            VALUES (gen_random_uuid(), '48747070099', 'BAD');
+
+            INSERT INTO credit_card_transaction(transaction_id, credit_card)
+            VALUES ('a0c2c04d-99a5-403e-ad1d-6bdacaec8137', '91554035066');
+
+            INSERT INTO credit_card_transaction(transaction_id, credit_card)
+            VALUES ('d5cfbb2c-3764-4a83-a7b5-6ed222188a62', '91554035066');
+
+            INSERT INTO credit_card_transaction(transaction_id, credit_card)
+            VALUES ('ae2672a8-7f52-4fc9-affc-f36a3653efbe', '48747070099');
+
+            INSERT INTO credit_card_transaction(transaction_id, credit_card)
+            VALUES ('9ed62548-c615-49fd-ad8f-eb1244a19fe8', '48747070099');
+
+            INSERT INTO transaction_status(transaction_id, status)
+            VALUES ('a0c2c04d-99a5-403e-ad1d-6bdacaec8137', 'APPROVED');
+
+            INSERT INTO transaction_status(transaction_id, status)
+            VALUES ('d5cfbb2c-3764-4a83-a7b5-6ed222188a62', 'PENDING');
+
+            INSERT INTO transaction_status(transaction_id, status)
+            VALUES ('ae2672a8-7f52-4fc9-affc-f36a3653efbe', 'APPROVED');
+
+            INSERT INTO transaction_status(transaction_id, status)
+            VALUES ('9ed62548-c615-49fd-ad8f-eb1244a19fe8', 'DECLINED');
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>
